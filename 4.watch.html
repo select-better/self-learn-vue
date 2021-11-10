@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src='./vue.js'></script>
+    <div id="root">
+        <div>
+            今天天气{{ info }}
+        </div>
+        <button @click='changeWeather'>
+            切换天气
+        </button>
+    </div>
+    <script>
+        Vue.config.productionTip = false
+        const vm = new Vue({
+            el: '#root',
+            data: {
+                isHot: false
+            },
+            computed: {
+                info(){
+                    return this.isHot ? '炎热' : '寒冷'
+                }
+            },
+            methods: {
+                changeWeather(){
+                   this.isHot = !this.isHot 
+                }
+            }, 
+            watch: {
+                // isHot: {
+                //     immediate: true, // 是不是立即执行
+                //     deep: true,  // 是不是深度
+                //     handler(newValue, lastValue){
+                //         console.log(`isHot change: ${newValue}, ${lastValue}`)
+                //     }
+                // }
+
+                // 在内部简写，当数据没有immediate和deep的时候，就是handler
+                isHot(newValue, lastValue){
+                    console.log(`isHot change: ${newValue}, ${lastValue}`)
+                }
+            }
+        })
+
+        // 在外面正常写
+        // vm.$watch('isHot', {
+        //     immediate: true, // 是不是立即执行
+        //     deep: true,  // 是不是深度
+        //     handler(newValue, lastValue){
+        //         console.log(`isHot change: ${newValue}, ${lastValue}`)
+        //     }
+        // })
+        // 在外面简写，当数据没有immediate和deep的时候，就是handler
+        // vm.$watch('isHot', function(newValue, lastValue){
+        //     console.log(`isHot change: ${newValue}, ${lastValue}`)
+        // })
+    </script>
+</body>
+</html>

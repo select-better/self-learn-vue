@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 自定义放大十倍的 v-big -->
+    <!-- 自定义绑定数据v-bind并且获取焦点 v-f-bind -->
+    <script src='./vue.js'></script>
+    <div id="root">
+        <div>
+            当前的count: {{ count }}
+        </div>
+        <div>
+            放大10倍的count: <span v-big='count'></span>
+        </div>
+        <button @click='count = count + 1'> 点击+1</button>
+        <hr/>
+        <input v-f-bind='num' />
+    </div>
+
+    <div>
+        <button id='btn'> 点击新增input</button>
+    </div>
+    <script>
+        // 如下所示，如果需要获取焦点，就需要选挂上去，所以在下面写的才能获取焦点
+        document.getElementById('btn').addEventListener('click', () => {
+            const input = document.createElement('input');
+            // input.focus() // 不能获取焦点
+            document.body.appendChild(input) 
+            // input.focus()  // 能获取焦点
+        })
+    </script>
+    <script>
+        // 指令的最命名就是像 上面这样， 小写的用 - 相连
+
+        // 全局注册
+        Vue.directive('f-bind', {
+            bind(ele, bind){
+                ele.value = bind.value
+            },
+            // inserted 当组件进行了挂载
+            inserted(ele){
+                ele.focus()
+            }, 
+            // 更新的时候
+            update(ele, bind){
+                ele.value = bind.value
+            },
+        })
+
+        // 内部是局部注册
+        new Vue({
+            el:'#root',
+            data: {
+                count: 1,
+                num: 10
+            },
+            directives: {
+                // 缩写就bind 和 update 的结合
+                big(element, bind){
+                    element.innerText = bind.value * 10
+                },
+                // 需要当input挂载上去才能获取焦点
+                // 以下3个函数的this都是指向window
+                // 'f-bind': {
+                //    bind(ele, bind){
+                //      ele.value = bind.value
+                //    },
+                //    // inserted 当组件进行了挂载
+                //    inserted(ele){
+                //      ele.focus()
+                //    }, 
+                //    // 更新的时候
+                //     update(ele, bind){
+                //         ele.value = bind.value
+                //     },
+                // }
+            }
+        })
+    </script>
+</body>
+</html>

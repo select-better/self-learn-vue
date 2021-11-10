@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src='./vue.js'></script>
+    <style> 
+        .parent{
+            padding: 10px;
+            background: lawngreen;
+            margin: 10px
+        }
+        .container{
+            width: 300px;
+            height: 300px;
+            overflow: auto;
+            margin: 10px;
+            background: lightblue
+        }
+        li{
+            height: 100px;
+        }
+    </style>
+
+</head>
+<body>
+    <div id='root'>
+       <div> 欢迎：{{name}}</div>
+       <!-- <button v-on:click='show'>
+           点击出信息
+       </button> -->
+       <!-- 事件的简写 -->
+       <button @click='show'>点击出信息</button>
+         <!-- 不传递参数可以省略 -->
+       <button @click='show1'>点击出信息1</button>
+       <!-- 传递传输用（），如果需要event，加上 $event 占位-->
+       <button @click='show2($event, 66)'>点击出信息2</button>
+
+
+       <!-- 
+          事件修饰符： 
+          1. prevent 去掉默认行为（常用）
+          2. stop 停止冒泡（常用）
+          3. once 只执行一次（常用）
+
+          4. capture 从捕获的时候执行
+          5. self event.target是自身的时候触发
+          6. passive 事件立即执行，不等事件回调结束，一般是平板等 wheel等事件
+        -->
+        <hr/>
+        <!-- 增加prevent， 或者在事件中添加 -->
+        <a  href='http://www.baidu.com' @click.prevent='show'>点击不跳转，回弹窗</a>
+
+         <div class="parent" @click='show'>
+             <button @click.stop='show'>
+                内部按钮(不冒泡)
+             </button>
+         </div>
+
+        <button @click.once='show'>多次点击只出现一次</button>
+
+        <!-- 下面不常用 -->
+
+        <div class="parent" @click.capture='showMsg(1)'>
+            <button @click='showMsg(2)'>
+               先执行外面的
+            </button>
+        </div>
+
+        <div class="parent" @click.self='show'>
+            <button @click='show'>
+               只会执行按钮事件
+            </button>
+        </div>
+         <!--  不加 passive 会有卡顿-->
+        <ul class="container" @wheel.passive='scroll' > 
+           <li v-for='item in items'>{{ item.id }}</li>
+        </ul>
+
+       <!--  scroll不影响 -->
+        <ul class="container" @scroll='scroll' > 
+            <li v-for='item in items'>{{ item.id }}</li>
+         </ul>
+    </div>
+    <script>
+       Vue.config.productionTip = false
+       const vm = new Vue({
+           el: '#root',
+           data: {
+              name :'wcl',
+              items: [{id:1},{id:2},{id:3},{id:4}]
+           },
+           methods: {
+             show(e){
+               console.log(e, this)
+               alert('come')
+             },
+             show1(e){
+               console.log(e)
+               alert('come1')
+             },
+             show2(e, number){
+               console.log(e, number)
+               alert('come2')
+             },
+             showMsg(cc){
+                console.log(cc)
+             },
+             scroll(){
+                 for(let i =0;i<100000; i++){
+                     console.log('$')
+                 }
+             }
+           }
+       })
+    </script>
+</body>
+</html>

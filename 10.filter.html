@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src='./vue.js'>
+
+    </script>
+    <!-- 处理事件的组件 -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/dayjs/1.10.6/dayjs.min.js"></script>
+    <div id="root">
+        <!-- 用computed -->
+        <h2>当前的时间是：{{ f1 }}</h2>
+         <!-- 用methods -->
+        <h2>当前的时间是：{{ f2() }}</h2>
+          <!-- 用filters -->
+          <!-- 会讲time传入f3 -->
+          <h2>当前的时间是：{{ time | f3  }}</h2>
+          <!-- 可以传入其他参数，单第一个使用时time -->
+          <h2>当前的时间是：{{ time | f3('YYYY年MM月DD日') }}</h2>
+          <!-- 可以管道传输，多个filter -->       
+          <h2>当前的时间是：{{ time | f3 | mySlice }}</h2>
+    </div>
+    <script>
+       
+        // 全局注册filter
+        Vue.filter('mySlice', function(str,len = 4){
+            return str.slice(0,len)
+        })
+        new Vue({
+            el: '#root',
+            data: {
+                time: 1634574966260
+            },
+            computed:{
+                f1(){
+                    return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss')
+                }
+            },
+            methods: {
+                f2(){
+                    return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss')
+                }
+            },
+            filters: {
+                f3(val, str='YYYY-MM-DD HH:mm:ss'){
+                    return dayjs(val).format(str)
+                }
+            }
+        })
+
+    </script>
+</body>
+</html>

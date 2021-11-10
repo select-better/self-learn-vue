@@ -1,0 +1,17 @@
+{
+  "name": "run_server",
+  "version": "1.0.0",
+  "description": "我们在vue里面使用 npm run build, 得到的文件可以来这里上线",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "connect-history-api-fallback": "^1.6.0",
+    "element-ui": "^2.15.6",
+    "express": "^4.17.1"
+  }
+}

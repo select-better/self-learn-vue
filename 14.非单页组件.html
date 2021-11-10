@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src='./vue.js'> </script>
+    <!--
+         注意： 
+            1. 当组件内写name的时候，在vue插件的现实就是这个name的驼峰命名
+            2. 组件名称建议
+               2.1 全部小写，多个用 my-school
+               2.2 首字母大写的驼峰命名 （需要在框架内） MySchool
+        
+         我们使用extend组件
+         1. 组件会返回 function VueComponent
+         2. 每个extend都会返回一个新的，不一样的
+         3. 当在template遇到组件会进行 new VueComponent() 构建实例
+
+         + new Vue 返回的 Vue实例
+            里面的生命周期，data，computed，watch等都会指向这个实例
+         + 组件的 返回时 VueComponent实例
+           里面的生命周期，data，computed，watch等都会指向这个VueComponent实例实例
+        Vue 和 VueComponent的区别： 
+          1. VueComponent的data必须是函数，Vue可以是对象
+          2. VueComponent不能有el， Vue得有el
+
+
+          // 有个内置关系
+          VueComponent.prototype.__proto__ === Vue.prototype
+
+          Vue  ---prototype -- > Vue.prototype --- > Object.prototype
+
+          vm.__proto__ === Vue.prototype 
+
+          VueComponent ---prototype -- > VueComponent.prototype --- >  Vue.prototype ----- > Object.prototype
+          
+          vc.__proto__ === VueComponent.prototype
+
+          // 从上面可以看出，我们将 比如 component注册到全局，就是注册到Vue.prototype上面，这样我们的vc就能通过原型链将数据进行获取
+      -->
+    <div id = 'root'>
+
+    </div>
+ 
+    <script >
+        // 1. 组件的注册，用extend
+        const student = Vue.extend({
+           template: `
+              <div>
+                <h2>学生名称：{{ name }}</h2>
+                <h2>学生年龄：{{ age }}</h2>
+              </div>
+           `,
+           data(){
+               return {
+                   name: 'wcl',
+                   age: 18
+               }
+           }
+        })
+
+        // Vue.extend data必须是函数， 不能有el
+        const school = Vue.extend({
+           template: `
+              <div>
+                <h2>学校名称：{{ name }}</h2>
+                <h2>学校地址：{{ address}}</h2>
+                <button @click='show'>点击出弹窗</button>
+                <student />
+              </div>
+           `,
+           data(){
+               return {
+                   name: '浙江万里学院',
+                   address: '宁波'
+               }
+           },
+           methods: {
+               show(){
+                   alert(this.name)
+               }
+           },
+           // 2， 注册， 局部注册
+           components: {
+               student
+           }
+        })
+
+        // true 和上面的内置对象一样
+        // school 就是 VueComponent
+        console.log('@', school.prototype.__proto__ === Vue.prototype)
+
+        const hello = {
+            template: `
+               <div>
+                 hello
+                </div>
+            `,
+        }
+
+        // 2. 进行全局注册
+        Vue.component('hello', hello);
+
+        // 简写
+        const app = {
+            template: `
+               <div>
+                  <school/>
+                  <hello />
+                </div>
+            `,
+            components: {
+                school
+            }
+        }
+       
+        console.log(app)
+
+        new Vue({
+            el: '#root',
+            // 3. 组件的渲染进行
+            template: `<app />`,
+            components: {
+                app
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        // 基本原理， 对data进行数据劫持
+        let data = {
+            name: 'wcl',
+            age: 18
+        }
+
+        const vm = {}
+
+        vm._data = data = new Observer(data)
+        // 没有深层次，没有对数据进行改变
+        function Observer(obj){
+           const keys = Object.keys(obj);
+           keys.forEach(item=>{
+               Object.defineProperty(this, item, {
+                   get(){
+                       return obj[item]
+                   },
+                   set(val){
+                       console.log('我触发更新，需要重新解析模版，进行页面更新，我很忙')
+                       obj[item] = val
+                   }
+               })
+           })
+        }
+    </script>
+     <script src='./vue.js'>
+       
+    </script>
+    <script>
+        // 对于内部的数组结构的更新
+        // 错误： this.student.friends[0] = { name: 'vv' , age: 16} , 不会更新
+        // 正确： this.student.friends.unshift({ name: 'vv' , age: 16} )
+
+        // 数组结构的更新
+        // 1.有其中会影响 原数组的方法： push, pop, unshift, shift, splice, reverse, sort; 这些方法不是数组的原来的方法，vue将其改造，除了更新数据，还会让vue模版重新解析
+        //    数组上的方法如上的7中之一，如果加的是对象，会将对象也进行劫持，和set其实是一个效果
+        // 2.原数组整体重新赋值: this.student.friends = this.student.friends.filter(item=>item.name!=='张山')
+        // 3. 使用vue的set: Vue.set(target, key, value); vm.$set(target, key, value)
+        //    set注意，不能设置最外层
+        // const cc = new Vue({
+        //     el: '#root',
+        //     data: {
+        //         a: 1
+        //     }
+        // })
+        // // error: 不能设置最外层
+        // Vue.set(cc._data, 'b', 'c')
+
+       
+        // 使用vue的set: Vue.set(target, key, value); vm.$set(target, key, value)
+        // 上面的方法用于我们对于某一属性原先没写的补充
+    </script>
+</body>
+</html>

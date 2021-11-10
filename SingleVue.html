@@ -1,0 +1,103 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-11-05 09:49:37
+ * @LastEditTime: 2021-11-05 10:47:15
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /study/learn_vue/SingleVue.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id='app'>
+        <h2>
+            大家好，我们进行简单的vue
+        </h2>
+        <div>
+            {{ name }} 
+        </div>
+        <div>
+            我们都要快乐
+        </div>
+    </div>
+    <script>
+        class Vue{
+            constructor(_opt){
+                this._opt= _opt
+                this.observer(_opt.data)
+                const root = typeof _opt.$el === 'string'? document.querySelector(_opt.$el): _opt.$el
+                this.compile(root)
+                this.root = root
+            }
+
+            observer(data){
+                Object.keys(data).forEach(key=>{
+                    data['_'+key] = data[key]
+                    let obv = new Observer();
+                    Object.defineProperty(data,key,{
+                        get(){
+                            // 在下面调用
+                            Observer.target && obv.add(Observer.target)
+                            return data['_'+key]
+                        },
+                        set(newVal){
+                            obv.update(newVal)
+                            data['_'+key] = newVal
+                        }
+                    })
+                })
+            }
+            compile(root){
+                const reg = /\{\{(.*)\}\}/;
+                [...root.childNodes].forEach(child=>{
+                    if(!child.firstChildElement && reg.test(child.innerHTML)){
+                       const key = RegExp.$1.trim()
+                       console.log(child.innerHTML)
+                       child.innerHTML = child.innerHTML.replace(new RegExp('\\{\\{\\s*'+ key +'\\s*\\}\\}','g'), this._opt.data[key])
+                        console.log(child.innerHTML)
+                       // 换完之后有
+                       Observer.target = child
+                       this._opt.data[key]
+                       Observer.target = null
+                    }else if(child.firstChildElement){
+                        this.compile(child)
+                    }
+                })
+            }
+        }
+
+        class Observer{
+            constructor(){
+                this.subNode = []
+            }
+            add(node){
+                this.subNode.push(node)
+            }
+            update(newVal){
+                if(this.subNode.length){
+                    this.subNode.forEach(item=>item.innerHTML = newVal)
+                }
+            }
+        }
+    </script>
+    <script>
+        const obj =  {
+               name: '张三'
+            }
+        new Vue({
+            $el: '#app',
+            data:obj
+        })
+
+        setTimeout(()=>{
+            obj.name = 'lisi'
+        },2000)
+    </script>
+</body>
+</html>

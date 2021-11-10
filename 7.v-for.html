@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src='./vue.js'></script>
+    <div id='root'>
+         <ul>
+             <!-- v-for 写的位置在要渲染的多个上面 index 是索引 -->
+             <!-- key需要是唯一值，所以是需要是id -->
+             <li v-for='(person, index) in persons' :key='person.id'>
+                 {{ person.name }} - {{ person.age }}
+             </li>
+              <hr />
+              <!-- v-for 对象 -->
+              <li v-for='(value, key) in li' :key='key'>
+                {{ key }} - {{ value }}
+              </li>
+              <hr />
+               <!-- v-for 字符串 -->
+                <li v-for='(value, key) in str' :key='key'>
+                 {{ key }} - {{ value }}
+                </li>
+                <hr />
+               <!-- v-for 数字 和字符串类似-->
+               <!-- <li v-for='(value, key) in num' :key='key'>
+                 {{ key }} - {{ value }}
+              </li> -->
+         </ul>
+
+         <hr/>
+
+         <h2>排序</h2>
+
+         <ul>
+             <div>
+                 <input type='text' v-model='keyWord'/>
+                 <button @click='sortType=0'>元素组</button>
+                 <button @click='sortType=1'>降序</button>
+                 <button @click='sortType=2'>升序</button>
+             </div>
+             <li v-for='p in filterPs' :key='p.id'>
+                {{ p.name }} - {{ p.age }} - {{ p.sex }}
+             </li>
+         </ul>
+    </div>
+   <script>
+       new Vue({
+           el: '#root',
+           data: {
+               persons: [
+                   { name: '张三', age: 14, id: '001'},
+                   { name: '李四', age: 24, id: '002'},
+                   { name: '王五', age: 34, id: '003'},
+               ],
+               li: {
+                  name: '张三',
+                  age: 14, 
+                  id: '001'
+               },
+               str: 'abc',
+               num: 5,
+
+               ps: [
+                   { name: '周冬雨', age: 18, id: '101', sex: 'woman'},
+                   { name: '马冬梅', age: 16, id: '102', sex: 'woman'},
+                   { name: '周杰伦', age: 34, id: '103', sex: 'man'},
+                   { name: '温兆伦', age: 44, id: '104', sex: 'man'},
+               ],
+               keyWord: '',
+               sortType: 0   // 0 不排序  1 降序 2 升序
+           },
+           computed:{
+               filterPs(){
+                   // 先过滤 再排序； 因为排序会改变原来的数组的
+                   const arr = this.ps.filter(item=> item.name.includes(this.keyWord))
+                   return !this.sortType ? arr : arr.sort((a,b) => this.sortType===1 ? b.age-a.age : a.age-b.age  )
+               }
+           }
+       })
+   </script>
+</body>
+</html>

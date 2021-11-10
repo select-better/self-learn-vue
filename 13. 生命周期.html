@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src='./vue.js'>
+
+    </script>
+    <div id="root"></div>
+    <script>
+        /**
+         *  主要使用 mounted 进行 数据的请求，定时器，事件订阅, 自定义事件等
+         *  主要使用 beforeDestory 进行 定时器，事件订阅等  this.$destory()进行卸载
+         * */ 
+     new Vue({
+         el: '#root',
+         beforeCreate(){
+            // 组件初始化，但还没有将methods，data等处理
+         },
+         created(){
+            // 组件进行 data，methods； 数据的劫持
+         },
+         // 这两个生命之间，回看有没有el, 没有的话，等 $mount挂载了再往beforeMount走
+         // 还得看template有没有，有的话就使用template 的内容
+         beforeMount() {
+            // 进行虚拟dom
+         },
+         mounted() {
+            // 真实dom
+         },
+         beforeUpdate(){
+             // 数据改变。dom还没变化
+         },
+         updated() {
+             // 数据,dom都变化
+         },
+         beforeDestroy() {
+             // 解决那些副作用，定时器等
+             // 如果改变了data，也不会在引起更新
+         },
+         destroyed() {
+             // 结束
+         },
+     })
+    </script>
+</body>
+</html>

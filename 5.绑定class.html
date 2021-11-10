@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .basic{
+            height: 60px;
+            width: 300px;
+            border: 1px solid #333;
+        }
+        .sad{
+            background: #ccc;
+            border: 3px solid green;
+        }
+        .happy{
+            background: red;
+        }
+
+        .wcl1{
+            font-size: 40px;
+        }
+        .wcl2{
+            border-radius: 8px;
+        }
+        .wcl3{
+            background: lightcoral;
+        }
+    </style>
+</head>
+<body>
+    <script src="./vue.js">
+
+    </script>
+    <div id='root'>
+       <!-- 字符串传递 -->
+       <div class="basic" :class='mood' @click='change'>
+           {{ name }} 学vue
+       </div>
+        <!-- 数组参数 -->
+        <div class="basic" :class='classArr'>
+            {{ name }} 学vue
+        </div>
+         <!-- 对象参数 -->
+         <div class="basic" :class='classObject'>
+            {{ name }} 学vue
+        </div>
+
+        <!-- style 的对象 -->
+        <div class="basic" :style ='styleObject'>
+            {{ name }} 学vue
+        </div>
+
+        <!-- style 的数组 主要还是class的比较多 -->
+        <div class="basic" :style ='styleArr'>
+          {{ name }} 学vue
+        </div>
+        <div class="basic" :style ='[styleObject,styleObject1]'>
+            {{ name }} 学vue
+          </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#root',
+            data: {
+                name: 'wcl',
+                mood: 'happy',
+                // 如果有设置可以有methods里面设置
+                classArr: ['wcl1','wcl2','wcl3'],
+                // 对象，除了false，true，应该可以别的参数，通过转化布尔值； 比如1就是true
+                classObject: {wcl1: 1,wcl2:false, wcl3: true},
+                
+                // 对象需要将属性改成驼峰
+                styleObject: {
+                    fontSize: '40px'
+                },
+                styleObject1: {
+                    background: 'lightcoral'
+                },
+                // 数组其实就像object.assign，会讲数据继续合并
+                styleArr: [
+                    {
+                        fontSize: '40px'
+                    },
+                    {
+                        background: 'lightcoral'
+                    }
+                ]
+            },
+            methods: {
+                change(){
+                    this.mood === 'happy' ? this.mood = 'sad' : this.mood ='happy'
+                }
+            }
+        })
+    </script>
+</body>
+</html>

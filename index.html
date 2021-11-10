@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src='./vue.js'></script>
+</head>
+<body>
+    <div id = 'root'>
+        <div>
+            姓名： {{ name }}
+        </div>
+        <div>
+            地址: {{ address }}
+        </div>
+        <!-- 单向绑定和双向绑定 -->
+        <!-- <input  v-model:value='name' type='text'/> -->
+        <!-- <input  v-bind:value='address' type='text'/> -->
+        <!-- 简写 -->
+        <input  v-model='name' type='text'/> 
+        <input  :value='address' type='text'/> 
+    </div>
+    <script>
+       Vue.config.productionTip = false
+       let data = {
+          name: 'wcl',
+          address: 'quzhou'
+       }
+       const vm = new Vue({
+           el: '#root',
+           data
+       })
+    </script>
+</body>
+</html>
